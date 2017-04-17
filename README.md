@@ -3,3 +3,5 @@
 Collaborators:
 - Humphrey Obuobi
 - Tara Murty
+- Michael Wong
+- Cole Durbin
