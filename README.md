@@ -3,6 +3,7 @@
 Collaborators:
 - Humphrey Obuobi
 - Erica Budina 
+- Tara Murty
 - Michael Wong
 - Cole Durbin
 
