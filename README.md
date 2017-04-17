@@ -3,3 +3,4 @@
 Collaborators:
 - Humphrey Obuobi
 - Michael Wong
+- Cole Durbin
