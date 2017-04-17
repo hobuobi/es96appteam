@@ -4,6 +4,6 @@ Collaborators:
 - Humphrey Obuobi
 - Erica Budina 
 - Tara Murty
-- Michael Wong v2
+- Michael Wong
 - Cole Durbin
 
