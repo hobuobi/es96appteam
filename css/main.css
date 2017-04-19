@@ -16,18 +16,20 @@ h1,h2,h3,h4,h5,h6 {
 
 .row {
     display: inline-block;
-    text-align: center;
     width: 100%;
     margin: 20px 0px;
 }
 
-.head h1,h2,h3,h4{
+.row > h1,h2,h3,h4{
     text-align: center;
     color: #c90016;
 }
 #main {
     width: 50%;
     margin: auto;
+}
+#where-select {
+    display: none;
 }
 .card {
     display: inline-block;
@@ -43,9 +45,7 @@ h1,h2,h3,h4,h5,h6 {
     width: 100%;
     height: 100px;
 }
-.place h1,h2,h3,h4 {
-    text-align: left;
-}
+
 .place div:first-child {
     display: inline-block;
     position: relative;
