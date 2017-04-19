@@ -21,11 +21,14 @@ h1,h2,h3,h4,h5,h6 {
     padding: 20px;
 }
 
-.head {
+.head h1,h2,h3,h4{
     text-align: center;
     color: #c90016;
 }
-
+#main {
+    width: 50%;
+    margin: auto;
+}
 .card {
     display: inline-block;
     margin: 20px;
@@ -43,6 +46,9 @@ h1,h2,h3,h4,h5,h6 {
 
 @media all and (max-width: 600px) {
     .card {
+        width: 100%;
+    }
+    .main {
         width: 100%;
     }
 }
