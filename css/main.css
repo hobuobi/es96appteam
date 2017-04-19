@@ -1,6 +1,6 @@
 body {
     margin: 0;
-    padding: 0;
+    padding: 20px
 }
 
 p {
@@ -16,9 +16,8 @@ h1,h2,h3,h4,h5,h6 {
 .row {
     display: inline-block;
     text-align: center;
-    width: calc(100%-40px);
+    width: 100%;
     margin: 20px 0px;
-    padding: 20px;
 }
 
 .head h1,h2,h3,h4{
@@ -46,7 +45,7 @@ h1,h2,h3,h4,h5,h6 {
 
 @media all and (max-width: 600px) {
     .card {
-        width: 100%;  
+        width: calc(100%-20px);  
     }
     #main {
         width: 100%;
