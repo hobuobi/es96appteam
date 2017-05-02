@@ -18,14 +18,18 @@ function whenInject(){
         whenSlider.style.margin = '0 auto 30px';
         noUiSlider.create(whenSlider, {
             behaviour: 'tap-drag',
-            start: [ 600, 1200 ],
+            start: [ 0, 12 ],
             tooltips: [true,true],
             connect: [false,true,false],
             range: {
-                'min': [  600 ],
-                'max': [ 2300 ]
+                'min': [ 00 ],
+                'max': [ 23 ]
             },
-            step: 100,
+            format: wNumb({
+		    decimals: 2,
+            mark: ':'
+	}),
+            step: 1,
             orientation: 'vertical'
         });
 }
