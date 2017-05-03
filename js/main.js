@@ -1,3 +1,7 @@
+/* STATE VARIABLES */ 
+
+var selected_place = 'lev';
+
 function moveToChoices(){
 
     $("#main").animate({
@@ -24,9 +28,12 @@ function moveLeft(){
         }
 }
 function whereInject(){
-    $("#choice-action").append("<h1 class='text-upper'>Pick a place.</h1><h2>Choose from any of the following, then press CONTINUE.</h2><input name='place-search' id='place-search' type='text' placeholder='Search a place here.'><br><div class='place choice' id='lamont'><p class='text-upper text-red'>Lamont Library</p><p>Capacity: 80 People</p><p><span class='text-green text-upper'>OPEN</span> | Open from 8AM to 12AM</p></div><div class='place choice' id='md-lobby'><p class='text-upper text-red'>Maxwell Dworkin Lobby</p><p>Capacity: 30 People</p><p><span class='text-green text-upper'>OPEN</span> | Open from 8AM to 12AM</p></div><div class='place choice' id='lev'><p class='text-upper text-red'>Leverett Dining Hall</p><p>Capacity: 150 People</p><p><span class='text-green text-upper'>OPEN</span> | Open from 8AM to 12AM</p></div>");
+    $("#choice-action").append("<h1 class='text-upper'>Pick a place.</h1><h2>Choose from any of the following, then press CONTINUE.</h2><input name='place-search' id='place-search' type='text' placeholder='Search a place here.'><br>");
     $("#choice-action").append('<div id="continue"><span class="text-white text-upper">CONTINUE</span></div>');
     $("#continue").click(moveToResults);
+    for(place in PLACES){
+        $("#choice-action").append("<div class='place choice' id='"+PLACES[place].id+"'><p class='text-upper text-red'>"+PLACES[place].name+"</p><p>Capacity: "+PLACES[place].capacity+" People</p><p><span class='text-green text-upper'>OPEN</span> | "+PLACES[place].open+"</p></div>")
+    }
     $(".choice").click(function(){
         $(this).siblings().removeClass("active")
         $(this).addClass("active");
@@ -183,4 +190,6 @@ function format(d) {
 
 })
 
-
+/*
+<div class='place choice' id='lamont'><p class='text-upper text-red'>Lamont Library</p><p>Capacity: 80 People</p><p><span class='text-green text-upper'>OPEN</span> | Open from 8AM to 12AM</p></div><div class='place choice' id='md-lobby'><p class='text-upper text-red'>Maxwell Dworkin Lobby</p><p>Capacity: 30 People</p><p><span class='text-green text-upper'>OPEN</span> | Open from 8AM to 12AM</p></div><div class='place choice' id='lev'><p class='text-upper text-red'>Leverett Dining Hall</p><p>Capacity: 150 People</p><p><span class='text-green text-upper'>OPEN</span> | Open from 8AM to 12AM</p></div>
+*/
