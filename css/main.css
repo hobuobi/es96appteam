@@ -86,7 +86,7 @@ input[type="text"]:focus{
 .half {
     position: absolute;
     display: inline-block;
-    height: 100%;
+    height: calc(100% - 100px);
     width: calc(20% - 60px);
     padding: 50px 30px;
 }
@@ -176,4 +176,45 @@ input[type="text"]:focus{
 .when-preselect img{
     height: 100%;
     margin: auto;
+}
+
+/* RESULTS */
+
+#selection-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    background-color: #FAFAFA;
+    text-align: center;
+}
+.selection-arrow {
+    color: #9B9B9B;
+    background-color: #F4F4F4;
+    font-size: 30px;
+    padding: 20px;
+    height: calc(100% - 40px);
+}
+#left {
+    float: left;
+}
+#right {
+    float: right;
+}
+
+#selection-name {
+    top: 10px;
+    position: relative;
+    color: #4A4A4A;
+    padding: 20px 15px;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-size: 30px;
+    font-weight: 500;
+}
+
+#graph {
+    width: 100%;
+    height: 30%;
 }
