@@ -98,10 +98,10 @@ var svg = d3.select("#graph")
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-d3.csv("data/lev_mon.csv", format, function(error, data){
+d3.csv("data/lev_wed.csv", format, function(error, data){
   if (error) throw error;
 
-  yScale.domain([0, d3.max(data, function(d) { return d["value"]; })]);
+  yScale.domain([d3.max(data, function(d) { return d["value"]; }),0]);
   xScale.domain([0, d3.max(data, function(d) { return d["time"]; })]);
 
   svg.append("g")
