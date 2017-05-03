@@ -38,6 +38,9 @@ function whereInject(){
         $(this).siblings().removeClass("active")
         $(this).addClass("active");
     })
+    $(".place").click(function(){
+        updatePlace($(this).attr("id"));
+    })
 }
 function whenInject(){
     $("#choice-action").append("<h1 class='text-upper'>Pick a time.</h1><h2>Pick a time by adjusting the sliders below.</h2><br><div id='when-box'><div class='half'><div id='when-slider'></div></div><div class='half'><div class='when-preselect' id='morning'><img src='img/morning.png'></div><div class='when-preselect' id='afternoon'><img src='img/afternoon.png'></div><div class='when-preselect' id='evening'><img src='img/evening.png'></div></div></div>")
@@ -64,7 +67,9 @@ function whenInject(){
     $("#choice-action").append('<div id="continue"><span class="text-white text-upper">CONTINUE</span></div>');
     $("#continue").click(moveToResults);
 }
-
+function updatePlace(str){
+    selected_place = str;
+}
 $(document).ready(function(){
     $(".choice").click(function(){
         $(this).siblings().removeClass("active")
