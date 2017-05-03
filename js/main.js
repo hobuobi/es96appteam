@@ -40,10 +40,11 @@ function whenInject(){
             connect: [false,true,false],
             range: {
                 'min': [ 00 ],
-                'max': [ 23 ]
+                'max': [ 24 ]
             },
             format: wNumb({
 		    decimals: 2,
+            suffix: 'H',
             mark: ':'
 	}),
             step: 1,
