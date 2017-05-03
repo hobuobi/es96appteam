@@ -41,6 +41,9 @@ function whereInject(){
     $(".place").click(function(){
         updatePlace($(this).attr("id"));
     })
+    $("#place-search").keyup(function(){
+        search($(this).val().toLowerCase())
+    })
 }
 function whenInject(){
     $("#choice-action").append("<h1 class='text-upper'>Pick a time.</h1><h2>Pick a time by adjusting the sliders below.</h2><br><div id='when-box'><div class='half'><div id='when-slider'></div></div><div class='half'><div class='when-preselect' id='morning'><img src='img/morning.png'></div><div class='when-preselect' id='afternoon'><img src='img/afternoon.png'></div><div class='when-preselect' id='evening'><img src='img/evening.png'></div></div></div>")
@@ -69,6 +72,15 @@ function whenInject(){
 }
 function updatePlace(str){
     selected_place = str;
+}
+function search(str){
+    for(place in PLACES){
+        if((PLACES[place].name).toLowerCase().includes(str)){
+            $("#"+PLACES[place].id).show();
+        }
+        else
+            $("#"+PLACES[place].id).hide();
+    }
 }
 $(document).ready(function(){
     $(".choice").click(function(){
