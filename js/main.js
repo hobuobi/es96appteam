@@ -71,3 +71,112 @@ $(document).ready(function(){
     })
     $("#back").click(moveLeft);
 })
+
+$(document).ready(function(){
+    /* GRAPH FUNCTIONS */
+var margin = {top: 20, right: 30, bottom: 30, left: 30},
+    width = parseInt(d3.select("#graph").style("width")) - margin.left - margin.right,
+    height = parseInt(d3.select("#graph").style("height")) - margin.top - margin.bottom;
+
+var yScale = d3.scale.linear()
+    .range([height, 0]);
+
+var xScale = d3.scale.linear()
+    .range([0, width]);
+
+var yAxis = d3.svg.axis()
+    .scale(yScale)
+    .orient("left");
+
+var xAxis = d3.svg.axis()
+    .scale(xScale)
+    .orient("bottom")
+
+var svg = d3.select("#graph")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+d3.csv("data/lev_mon.csv", format, function(error, data){
+  if (error) throw error;
+
+  yScale.domain([0, d3.max(data, function(d) { return d["value"]; })]);
+  xScale.domain([0, d3.max(data, function(d) { return d["time"]; })]);
+
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis);
+
+  svg.append("g")
+      .attr("class", "x axis")
+      .call(xAxis)
+      .attr("transform", "translate(0," + (height+10) + ")")
+    .append("text")
+      .attr("class", "label")
+      .attr("transform", "translate(" + width / 2 + "," + margin.bottom / 1.5 + ")")
+      .style("text-anchor", "middle")
+      .text("Time");
+  barRadius = width/400;
+  barWidth = width/30
+  svg.selectAll(".bar")
+      .data(data)
+    .enter().append("rect")
+      .attr("class", "bar")
+      .attr("height", function(d) { return yScale(d.value); })
+      .attr("x", function(d) { return xScale(d.time)-barWidth/2; })
+      .attr("width", barWidth)
+      .attr("y", function(d){ return height-yScale(d.value)})
+      .attr("rx", barRadius)
+      .attr("ry", barRadius)
+
+});
+
+// Define responsive behavior
+function resize() {
+  width = parseInt(d3.select("#graph").style("width")) - margin.left - margin.right,
+  height = parseInt(d3.select("#graph").style("height")) - margin.top - margin.bottom;
+
+  // Update the range of the scale with new width/height
+  xScale.range([0, width]);
+  yScale.range([height, 0]);
+
+  // Update the axis and text with the new scale
+  svg.select(".x.axis")
+    .call(xAxis)
+    .attr("transform", "translate(0," + (height+10) + ")")
+    .select(".label")
+      .attr("transform", "translate(" + width / 2 + "," + margin.bottom / 1.5 + ")");
+
+  svg.select(".y.axis")
+    .call(yAxis);
+
+
+  // Force D3 to recalculate and update the line
+  barRadius = width/400;
+  barWidth = width/30;
+  svg.selectAll(".bar")
+    .attr("height", function(d) { return yScale(d.value); })
+    .attr("x", function(d) { return xScale(d.time)-barWidth/2; })
+    .attr("width", barWidth)
+    .attr("y", function(d){ return height-yScale(d.value)})
+    .attr("rx", barRadius)
+    .attr("ry", barRadius)
+};
+
+// Call the resize function whenever a resize event occurs
+d3.select(window).on('resize', resize);
+
+// Call the resize function
+resize();
+
+// Define the format function
+function format(d) {
+  d.value = +d.value;
+  d.time = +d.time;
+  return d;
+}
+
+})
+
+
