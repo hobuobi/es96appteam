@@ -59,6 +59,19 @@ input[type="text"]:focus{
     transition: 0.3s;
     z-index: 9999;
 }
+#continue {
+    position: absolute; 
+    bottom: 0;
+    right: 0;
+    background-color: #00FFA1;
+    padding: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+    z-index: 9999;
+}
+#continue:hover{
+    background-color: lightseagreen;
+}
 #back:hover{
     background-color: lightseagreen;
 }
@@ -67,14 +80,28 @@ input[type="text"]:focus{
     top: 0;
     left: 0;
     height: 100%;
-    width: 150%;
+    width: 250%;
     overflow: hidden;
 }
 .half {
     position: absolute;
     display: inline-block;
     height: 100%;
-    width: calc(33.33% - 60px);
+    width: calc(20% - 60px);
+    padding: 50px 30px;
+}
+.quart {
+    position: absolute;
+    display: inline-block;
+    height: 100%;
+    width: calc(10% - 60px);
+    padding: 50px 30px;
+}
+.three-quart {
+    position: absolute;
+    display: inline-block;
+    height: 100%;
+    width: calc(30% - 60px);
     padding: 50px 30px;
 }
 #intro {
@@ -89,15 +116,20 @@ input[type="text"]:focus{
     color: white;
 }
 #choice-select {
-    left: 33.33%;
+    left: 20%;
     
 }
 #choice-action {
-    left: 66.66%;
+    left: 40%;
     border-left: solid 10px #FF5858;
 }
-
-
+#sound-select {
+    left: 60%;
+}
+#results {
+    left: 70%;
+    border-left: solid 10px #FF5858;
+}
 /* CHOICE SELECT */ 
 
 .choice {
