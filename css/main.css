@@ -195,6 +195,11 @@ input[type="text"]:focus{
     font-size: 30px;
     padding: 20px;
     height: calc(100% - 40px);
+    transition: 0.3s;
+}
+.selection-arrow:hover{
+    background-color: #DDD;
+    cursor: pointer;
 }
 #left {
     float: left;
