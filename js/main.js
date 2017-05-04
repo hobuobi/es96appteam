@@ -1,4 +1,5 @@
 var bars,svg,selected_place,selected_day,UV
+var placeList = Object.keys(PLACES).map(function (key) { return PLACES[key].id; }); 
 $(document).ready(function(){
     $(".choice").click(function(){
         $(this).siblings().removeClass("active")
@@ -15,10 +16,15 @@ $(document).ready(function(){
         moveToChoices()
     })
     $("#back").click(moveLeft);
+    $(".selection-arrow").click(function(){
+        updatePlace(placeList[(placeList.indexOf(selected_place)+1)%placeList.length],updateVisualization)
+    });
 /* STATE VARIABLES */ 
 
 selected_place = 'lev';
 selected_day = 'mon'
+
+/* FUNCTIONS */
 function moveToChoices(){
 
     $("#main").animate({
