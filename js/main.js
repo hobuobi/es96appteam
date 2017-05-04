@@ -1,7 +1,24 @@
+var bars,svg,selected_place,selected_day,UV
+$(document).ready(function(){
+    $(".choice").click(function(){
+        $(this).siblings().removeClass("active")
+        $(this).addClass("active");
+    })
+    $(".pref").click(function(){
+        $("#choice-action").empty();
+        if($(this).attr('id') == 'where'){
+            whereInject();
+        }
+        else{
+            whenInject();
+        }
+        moveToChoices()
+    })
+    $("#back").click(moveLeft);
 /* STATE VARIABLES */ 
 
-var selected_place = 'lev';
-
+selected_place = 'lev';
+selected_day = 'mon'
 function moveToChoices(){
 
     $("#main").animate({
@@ -39,7 +56,8 @@ function whereInject(){
         $(this).addClass("active");
     })
     $(".place").click(function(){
-        updatePlace($(this).attr("id"));
+        updatePlace($(this).attr("id"),updateVisualization);
+//        updateVisualization();
     })
     $("#place-search").keyup(function(){
         search($(this).val().toLowerCase())
@@ -70,8 +88,9 @@ function whenInject(){
     $("#choice-action").append('<div id="continue"><span class="text-white text-upper">CONTINUE</span></div>');
     $("#continue").click(moveToResults);
 }
-function updatePlace(str){
+function updatePlace(str,fn=null){
     selected_place = str;
+    fn(place_id=str);
 }
 function search(str){
     for(place in PLACES){
@@ -82,25 +101,6 @@ function search(str){
             $("#"+PLACES[place].id).hide();
     }
 }
-$(document).ready(function(){
-    $(".choice").click(function(){
-        $(this).siblings().removeClass("active")
-        $(this).addClass("active");
-    })
-    $(".pref").click(function(){
-        $("#choice-action").empty();
-        if($(this).attr('id') == 'where'){
-            whereInject();
-        }
-        else{
-            whenInject();
-        }
-        moveToChoices()
-    })
-    $("#back").click(moveLeft);
-})
-
-$(document).ready(function(){
     /* GRAPH FUNCTIONS */
 var margin = {top: 20, right: 30, bottom: 30, left: 30},
     width = parseInt(d3.select("#graph").style("width")) - margin.left - margin.right,
@@ -120,46 +120,71 @@ var xAxis = d3.svg.axis()
     .scale(xScale)
     .orient("bottom")
 
-var svg = d3.select("#graph")
+svg = d3.select("#graph")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-d3.csv("data/lev_wed.csv", format, function(error, data){
-  if (error) throw error;
+d3.csv("data/"+selected_place+"_"+selected_day+".csv", format, function(error, data){
+    if (error) throw error;
 
-  yScale.domain([d3.max(data, function(d) { return d["value"]; }),0]);
-  xScale.domain([0, d3.max(data, function(d) { return d["time"]; })]);
+    yScale.domain([d3.max(data, function(d) { return d["value"]; }),0]);
+    xScale.domain([0, d3.max(data, function(d) { return d["time"]; })]);
 
-  svg.append("g")
-      .attr("class", "y axis")
-      .call(yAxis);
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis);
 
-  svg.append("g")
-      .attr("class", "x axis")
-      .call(xAxis)
-      .attr("transform", "translate(0," + (height+10) + ")")
-    .append("text")
-      .attr("class", "label")
-      .attr("transform", "translate(" + width / 2 + "," + margin.bottom / 1.5 + ")")
-      .style("text-anchor", "middle")
-      .text("Time");
-  barRadius = width/400;
-  barWidth = width/30
-  svg.selectAll(".bar")
-      .data(data)
-    .enter().append("rect")
-      .attr("class", "bar")
-      .attr("height", function(d) { return yScale(d.value); })
-      .attr("x", function(d) { return xScale(d.time)-barWidth/2; })
-      .attr("width", barWidth)
-      .attr("y", function(d){ return height-yScale(d.value)})
-      .attr("rx", barRadius)
-      .attr("ry", barRadius)
+    svg.append("g")
+        .attr("class", "x axis")
+        .call(xAxis)
+        .attr("transform", "translate(0," + (height+10) + ")")
+        .append("text")
+        .attr("class", "label")
+        .attr("transform", "translate(" + width / 2 + "," + margin.bottom / 1.5 + ")")
+        .style("text-anchor", "middle")
+        .text("Time");
+    barRadius = width/400;
+    barWidth = width/30
+    svg.selectAll(".bar")
+        .data(data)
+        .enter().append("rect")
+        .attr("class", "bar")
+        .attr("height", function(d) { return yScale(d.value); })
+        .attr("x", function(d) { return xScale(d.time)-barWidth/2; })
+        .attr("width", barWidth)
+        .attr("y", function(d){ return height-yScale(d.value)})
+        .attr("rx", barRadius)
+        .attr("ry", barRadius)
 
-});
+})
+function updateVisualization(place_id=selected_place,day_id=selected_day){
+    console.log("data/"+place_id+"_"+day_id+".csv")
+    d3.csv("data/"+place_id+"_"+day_id+".csv", format, function(error, data){
+        console.log(data)
+        if (error) throw error;
 
+        barRadius = width/400;
+        barWidth = width/30;
+        bars = svg.selectAll(".bar").data(data);
+        bars.exit().remove();
+        bars
+            .enter().append("rect")
+        bars
+            .transition()
+            .duration(500)
+            .attr("class", "bar")
+            .attr("height", function(d) { return yScale(d.value); })
+            .attr("x", function(d) { return xScale(d.time)-barWidth/2; })
+            .attr("width", barWidth)
+            .attr("y", function(d){ return height-yScale(d.value)})
+            .attr("rx", barRadius)
+            .attr("ry", barRadius)
+        $('#selection-name').text(PLACES[place_id].name)
+    })
+};
+    
 // Define responsive behavior
 function resize() {
   width = parseInt(d3.select("#graph").style("width")) - margin.left - margin.right,
@@ -196,7 +221,7 @@ function resize() {
 d3.select(window).on('resize', resize);
 
 // Call the resize function
-resize();
+//resize();
 
 // Define the format function
 function format(d) {
@@ -204,7 +229,7 @@ function format(d) {
   d.time = +d.time;
   return d;
 }
-
+UV = updateVisualization;
 })
 
 /*
