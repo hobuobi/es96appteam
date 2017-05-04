@@ -133,6 +133,7 @@ input[type="text"]:focus{
 /* CHOICE SELECT */ 
 
 .choice {
+    position: relative;
     border: none;
     border-left: 10px #9B9B9B solid;
     padding: 20px;
@@ -155,7 +156,29 @@ input[type="text"]:focus{
 }
 
 .place {
+    position: relative;
     width: 100%;
+}
+
+.choice:before {
+  content: "";
+  position: absolute;
+  width: 0%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: #FF5858;
+  visibility: hidden;
+  -webkit-transition: all 0.3s ease-in-out 0s;
+  transition: all 0.3s ease-in-out 0s;
+  z-index: -1;
+}
+.active:before {
+  visibility: visible;
+  width: calc(100% - 60px);
+}
+.active > span,.active > p,.active > span.text-red {
+    color: white !important;
 }
 #when-box .half:nth-child(2) {
     left: 50%;
