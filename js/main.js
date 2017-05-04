@@ -17,7 +17,10 @@ $(document).ready(function(){
     })
     $("#back").click(moveLeft);
     $(".selection-arrow").click(function(){
-        updatePlace(placeList[(placeList.indexOf(selected_place)+1)%placeList.length],updateVisualization)
+        if($(this).hasClass('left'))
+            updatePlace(placeList[(placeList.indexOf(selected_place)+placeList.length-1)%placeList.length],updateVisualization)
+        else
+            updatePlace(placeList[(placeList.indexOf(selected_place)+1)%placeList.length],updateVisualization)
     });
 /* STATE VARIABLES */ 
 
@@ -113,7 +116,7 @@ var margin = {top: 20, right: 30, bottom: 30, left: 30},
     height = parseInt(d3.select("#graph").style("height")) - margin.top - margin.bottom;
 
 var yScale = d3.scale.linear()
-    .range([height, 0]);
+    .range([0,height]);
 
 var xScale = d3.scale.linear()
     .range([0, width]);
@@ -157,10 +160,10 @@ d3.csv("data/"+selected_place+"_"+selected_day+".csv", format, function(error, d
         .data(data)
         .enter().append("rect")
         .attr("class", "bar")
-        .attr("height", function(d) { return yScale(d.value); })
+        .attr("height", function(d) { return height-yScale(d.value); })
         .attr("x", function(d) { return xScale(d.time)-barWidth/2; })
         .attr("width", barWidth)
-        .attr("y", function(d){ return height-yScale(d.value)})
+        .attr("y", function(d){ return yScale(d.value)})
         .attr("rx", barRadius)
         .attr("ry", barRadius)
 
@@ -181,10 +184,10 @@ function updateVisualization(place_id=selected_place,day_id=selected_day){
             .transition()
             .duration(500)
             .attr("class", "bar")
-            .attr("height", function(d) { return yScale(d.value); })
+            .attr("height", function(d) { return height-yScale(d.value); })
             .attr("x", function(d) { return xScale(d.time)-barWidth/2; })
             .attr("width", barWidth)
-            .attr("y", function(d){ return height-yScale(d.value)})
+            .attr("y", function(d){ return yScale(d.value)})
             .attr("rx", barRadius)
             .attr("ry", barRadius)
         $('#selection-name').text(PLACES[place_id].name)
@@ -215,10 +218,10 @@ function resize() {
   barRadius = width/400;
   barWidth = width/30;
   svg.selectAll(".bar")
-    .attr("height", function(d) { return yScale(d.value); })
+    .attr("height", function(d) { return height-yScale(d.value); })
     .attr("x", function(d) { return xScale(d.time)-barWidth/2; })
     .attr("width", barWidth)
-    .attr("y", function(d){ return height-yScale(d.value)})
+    .attr("y", function(d){ return yScale(d.value)})
     .attr("rx", barRadius)
     .attr("ry", barRadius)
 };
