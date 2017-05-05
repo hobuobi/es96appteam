@@ -53,11 +53,16 @@ input[type="text"]:focus{
     position: fixed; 
     bottom: 0;
     left: 0;
-    background-color: #00FFA1;
-    padding: 20px;
+    background-color: white;
+    padding: 10px;
     cursor: pointer;
     transition: 0.3s;
     z-index: 9999;
+    border: solid 10px #FF5858;
+    color: #FF5858;
+}
+#back span {
+    color: #FF5858;
 }
 #continue {
     position: absolute; 
@@ -67,13 +72,17 @@ input[type="text"]:focus{
     padding: 20px;
     cursor: pointer;
     transition: 0.3s;
-    z-index: 9999;
+    z-index: 9998;
 }
 #continue:hover{
     background-color: lightseagreen;
 }
 #back:hover{
-    background-color: lightseagreen;
+    background-color: #FF5858;
+    color: white;
+}
+#back:hover span{
+    color: white;
 }
 #main {
     position: fixed;
@@ -147,6 +156,7 @@ input[type="text"]:focus{
 }
 .active {
     border-left: 10px #FF5858 solid;
+    transition: 0.3s;
 }
 
 /* CHOICE ACTION */
@@ -169,8 +179,8 @@ input[type="text"]:focus{
   left: 0;
   background-color: #FF5858;
   visibility: hidden;
-  -webkit-transition: all 0.3s ease-in-out 0s;
-  transition: all 0.3s ease-in-out 0s;
+  -webkit-transition: all 0.5s ease 0s;
+  transition: all 0.5s ease 0s;
   z-index: -1;
 }
 .active:before {
