@@ -8,6 +8,22 @@ var bars,svg,selected_place,selected_day,UV,startTime,endTime,loudness, loudness
 var placeList = Object.keys(PLACES).map(function (key) { return PLACES[key].id; }); 
 
 $(document).ready(function(){
+    var loudSlider = document.getElementById('loud-select');
+        loudSlider.style.height = '400px';
+        loudSlider.style.margin = '0 auto 30px';
+        noUiSlider.create(loudSlider, {
+            behaviour: 'tap-drag',
+            start: [0],
+            tooltips: [true],
+            connect: [true,false],
+            range: {
+                'min': [ 0 ],
+                'max': [ 3 ]
+            },
+            step: 1,
+            orientation: 'vertical'
+        });
+    loudSlider.noUiSlider.on('slide',updateLoud)
     $(".choice").click(function(){
         $(this).siblings().removeClass("active")
         $(this).addClass("active");
@@ -113,6 +129,11 @@ function updateDay(str,fn=null){
     selected_day = str;
     fn(place_id=selected_place,day_id=str);
 }
+function updateLoud(){
+    console.log(loudSlider)
+    loudness_index = parseInt(loudSlider.noUiSlider.get());
+    updateVisualization(place_id=selected_place,day_id=selected_day,loud=loudness_index);
+}
 function search(str){
     for(place in PLACES){
         if((PLACES[place].name).toLowerCase().includes(str)){
@@ -184,29 +205,6 @@ d3.csv("data/"+selected_place+"_"+selected_day+".csv", format, function(error, d
 
 })
 
-function loudInject(){
-    $("#choice-select").append("<div id='loud-select'></div>")
-    var loudSlider = document.getElementById('loud-select');
-        loudSlider.style.height = '400px';
-        loudSlider.style.margin = '0 auto 30px';
-        noUiSlider.create(loudSlider, {
-            behaviour: 'tap-drag',
-            start: [ 0, 12 ],
-            tooltips: [true,true],
-            connect: [false,true,false],
-            range: {
-                'min': [ 00 ],
-                'max': [ 24 ]
-            },
-            format: wNumb({
-		    decimals: 2,
-            suffix: 'H',
-            mark: ':'
-	}),
-            step: 1,
-            orientation: 'vertical'
-        });
-}
 function updateVisualization(place_id=selected_place,day_id=selected_day,loud=loudness_index){
     console.log("data/"+place_id+"_"+day_id+".csv")
     d3.csv("data/"+place_id+"_"+day_id+".csv", format, function(error, data){

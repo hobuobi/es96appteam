@@ -135,6 +135,9 @@ input[type="text"]:focus{
 #sound-select {
     left: 60%;
 }
+#sound-select h1 {
+    margin-bottom: 20px;
+}
 #results {
     left: 70%;
     border-left: solid 10px #FF5858;
@@ -200,7 +203,9 @@ input[type="text"]:focus{
 #when-box  .noUi-connect{
     background: #FF5858;
 }
-
+#sound-select .noUi-connect {
+    background: #FF5858;
+}
 .when-preselect {
     display: inline-block;
     height: 133px;
@@ -279,6 +284,7 @@ input[type="text"]:focus{
 .day-select:hover {
     color: white;
     background-color: #FF5858;
+    cursor: pointer;
 }
 .day-select.selected {
     color: white;
