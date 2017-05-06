@@ -12,6 +12,11 @@ $(document).ready(function(){
         $(this).siblings().removeClass("active")
         $(this).addClass("active");
     })
+    $(".day-select").click(function(){
+        $(this).siblings().removeClass("selected")
+        $(this).addClass("selected");
+        updateDay($(this).attr('id'),updateVisualization);
+    })
     $(".pref").click(function(){
         $("#choice-action").empty();
         if($(this).attr('id') == 'where'){
@@ -103,6 +108,10 @@ function whenInject(){
 function updatePlace(str,fn=null){
     selected_place = str;
     fn(place_id=str);
+}
+function updateDay(str,fn=null){
+    selected_day = str;
+    fn(place_id=selected_place,day_id=str);
 }
 function search(str){
     for(place in PLACES){
@@ -198,7 +207,7 @@ function loudInject(){
             orientation: 'vertical'
         });
 }
-function updateVisualization(place_id=selected_place,day_id=selected_day){
+function updateVisualization(place_id=selected_place,day_id=selected_day,loud=loudness_index){
     console.log("data/"+place_id+"_"+day_id+".csv")
     d3.csv("data/"+place_id+"_"+day_id+".csv", format, function(error, data){
         console.log(data)
