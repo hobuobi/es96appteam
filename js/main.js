@@ -1,5 +1,7 @@
-var bars,svg,selected_place,selected_day,UV
+var bars,svg,selected_place,selected_day,UV,startTime,endTime
 var placeList = Object.keys(PLACES).map(function (key) { return PLACES[key].id; }); 
+var loudness = [10,20,30,1000]
+var loudness_index = 1
 $(document).ready(function(){
     $(".choice").click(function(){
         $(this).siblings().removeClass("active")
@@ -168,7 +170,7 @@ d3.csv("data/"+selected_place+"_"+selected_day+".csv", format, function(error, d
         .attr("ry", barRadius)
 
 })
-function updateVisualization(place_id=selected_place,day_id=selected_day){
+function updateVisualization(place_id=selected_place,day_id=selected_day,loud=loudness_index){
     console.log("data/"+place_id+"_"+day_id+".csv")
     d3.csv("data/"+place_id+"_"+day_id+".csv", format, function(error, data){
         console.log(data)
@@ -190,6 +192,15 @@ function updateVisualization(place_id=selected_place,day_id=selected_day){
             .attr("y", function(d){ return yScale(d.value)})
             .attr("rx", barRadius)
             .attr("ry", barRadius)
+            .attr("opacity",function(d){
+                console.log(d)
+                if(d.value<loudness[loudness_index]){
+                    return 1;
+                }
+                    
+                else
+                    return 0.6;
+            })
         $('#selection-name').text(PLACES[place_id].name)
     })
 };
@@ -224,6 +235,15 @@ function resize() {
     .attr("y", function(d){ return yScale(d.value)})
     .attr("rx", barRadius)
     .attr("ry", barRadius)
+    .attr("opacity",function(d){
+                if(d<loudness[loudness_index]){
+                    console.log('yey')
+                    return 1;
+                }
+                    
+                else
+                    return 0.6;
+            })
 };
 
 // Call the resize function whenever a resize event occurs

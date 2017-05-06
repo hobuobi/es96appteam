@@ -263,7 +263,6 @@ input[type="text"]:focus{
 }
 .bar {
   fill: #FF5858;
-  opacity: 0.6;
 }
 
 .bar:hover {
