@@ -168,6 +168,30 @@ d3.csv("data/"+selected_place+"_"+selected_day+".csv", format, function(error, d
         .attr("ry", barRadius)
 
 })
+
+function loudInject(){
+    $("#choice-select").append("<div id='loud-select'></div>")
+    var loudSlider = document.getElementById('loud-select');
+        loudSlider.style.height = '400px';
+        loudSlider.style.margin = '0 auto 30px';
+        noUiSlider.create(loudSlider, {
+            behaviour: 'tap-drag',
+            start: [ 0, 12 ],
+            tooltips: [true,true],
+            connect: [false,true,false],
+            range: {
+                'min': [ 00 ],
+                'max': [ 24 ]
+            },
+            format: wNumb({
+		    decimals: 2,
+            suffix: 'H',
+            mark: ':'
+	}),
+            step: 1,
+            orientation: 'vertical'
+        });
+}
 function updateVisualization(place_id=selected_place,day_id=selected_day){
     console.log("data/"+place_id+"_"+day_id+".csv")
     d3.csv("data/"+place_id+"_"+day_id+".csv", format, function(error, data){
