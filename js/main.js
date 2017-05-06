@@ -1,7 +1,12 @@
-var bars,svg,selected_place,selected_day,UV,startTime,endTime
+/* STATE VARIABLES */ 
+
+selected_place = 'lev';
+selected_day = 'fri'
+loudness = [10,20,30,1000]
+loudness_index = 1
+var bars,svg,selected_place,selected_day,UV,startTime,endTime,loudness, loudness_index
 var placeList = Object.keys(PLACES).map(function (key) { return PLACES[key].id; }); 
-var loudness = [10,20,30,1000]
-var loudness_index = 1
+
 $(document).ready(function(){
     $(".choice").click(function(){
         $(this).siblings().removeClass("active")
@@ -24,10 +29,6 @@ $(document).ready(function(){
         else
             updatePlace(placeList[(placeList.indexOf(selected_place)+1)%placeList.length],updateVisualization)
     });
-/* STATE VARIABLES */ 
-
-selected_place = 'lev';
-selected_day = 'mon'
 
 /* FUNCTIONS */
 function moveToChoices(){
@@ -130,6 +131,9 @@ var yAxis = d3.svg.axis()
 var xAxis = d3.svg.axis()
     .scale(xScale)
     .orient("bottom")
+    .tickFormat(function(d){
+        return (d%12)+1
+    })
 
 svg = d3.select("#graph")
     .attr("width", width + margin.left + margin.right)
@@ -153,7 +157,7 @@ d3.csv("data/"+selected_place+"_"+selected_day+".csv", format, function(error, d
         .attr("transform", "translate(0," + (height+10) + ")")
         .append("text")
         .attr("class", "label")
-        .attr("transform", "translate(" + width / 2 + "," + margin.bottom / 1.5 + ")")
+        .attr("transform", "translate(" + width / 2 + "," + margin.bottom / 1.2 + ")")
         .style("text-anchor", "middle")
         .text("Time");
     barRadius = width/400;
@@ -163,7 +167,7 @@ d3.csv("data/"+selected_place+"_"+selected_day+".csv", format, function(error, d
         .enter().append("rect")
         .attr("class", "bar")
         .attr("height", function(d) { return height-yScale(d.value); })
-        .attr("x", function(d) { return xScale(d.time)-barWidth/2; })
+        .attr("x", function(d) { return xScale(d.time); })
         .attr("width", barWidth)
         .attr("y", function(d){ return yScale(d.value)})
         .attr("rx", barRadius)
@@ -193,8 +197,7 @@ function updateVisualization(place_id=selected_place,day_id=selected_day,loud=lo
             .attr("rx", barRadius)
             .attr("ry", barRadius)
             .attr("opacity",function(d){
-                console.log(d)
-                if(d.value<loudness[loudness_index]){
+                if(d.value<loudness[loud]){
                     return 1;
                 }
                     
@@ -230,17 +233,14 @@ function resize() {
   barWidth = width/30;
   svg.selectAll(".bar")
     .attr("height", function(d) { return height-yScale(d.value); })
-    .attr("x", function(d) { return xScale(d.time)-barWidth/2; })
+    .attr("x", function(d) { return xScale(d.time); })
     .attr("width", barWidth)
     .attr("y", function(d){ return yScale(d.value)})
     .attr("rx", barRadius)
     .attr("ry", barRadius)
     .attr("opacity",function(d){
-                if(d<loudness[loudness_index]){
-                    console.log('yey')
-                    return 1;
-                }
-                    
+                if(d<loudness[loudness_index])
+                    return 1;          
                 else
                     return 0.6;
             })

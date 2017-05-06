@@ -13,7 +13,7 @@ var PLACES = {
         "capacity": 70,
         "open": "24 HOURS"
     },
-    "mdlobby": {
+    "md2": {
         "name": 'Maxwell Dworkin 2nd Floor Lobby', 
         "id": 'md2',
         "images": [],
