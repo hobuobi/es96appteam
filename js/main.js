@@ -201,7 +201,7 @@ function resize() {
 
   // Update the range of the scale with new width/height
   xScale.range([0, width]);
-  yScale.range([height, 0]);
+  yScale.range([0, height]);
 
   // Update the axis and text with the new scale
   svg.select(".x.axis")

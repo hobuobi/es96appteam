@@ -187,7 +187,7 @@ input[type="text"]:focus{
   visibility: visible;
   width: calc(100% - 60px);
 }
-.active > span,.active > p,.active > span.text-red {
+.active  span,.active  p,.active  span.text-red {
     color: white !important;
 }
 #when-box .half:nth-child(2) {
