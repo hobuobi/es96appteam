@@ -3,7 +3,8 @@
 
 var bars,svg,selected_place,selected_day,UV,startTime,endTime,loudness, loudness_index,whenLimits,whenSlider
 selected_place = 'lev';
-selected_day = 'fri'
+var DATE = new Date()
+selected_day = (['sun','mon','tue','wed','thu','fri','sat'])[DATE.getDay()]
 loudness = [10,20,30,1000]
 loudness_index = 1
 whenLimits = [0,23]
