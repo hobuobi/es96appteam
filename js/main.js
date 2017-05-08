@@ -13,7 +13,7 @@ var placeList = Object.keys(PLACES).map(function (key) { return PLACES[key].id; 
 
 $(document).ready(function(){
     var loudSlider = document.getElementById('loud-select');
-        loudSlider.style.height = '400px';
+        loudSlider.style.height = '300px';
         loudSlider.style.margin = '0 auto 30px';
         noUiSlider.create(loudSlider, {
             behaviour: 'tap-drag',
@@ -25,7 +25,11 @@ $(document).ready(function(){
                 'max': [ 3 ]
             },
             step: 1,
-            orientation: 'vertical'
+            orientation: 'vertical',
+            format: wNumb({
+		    decimals: 0,
+            })
+            
         });
     loudSlider.noUiSlider.on('slide',updateLoud)
 
