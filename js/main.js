@@ -1,10 +1,12 @@
 /* STATE VARIABLES */ 
 
+
+var bars,svg,selected_place,selected_day,UV,startTime,endTime,loudness, loudness_index,whenLimits,whenSlider
 selected_place = 'lev';
 selected_day = 'fri'
 loudness = [10,20,30,1000]
 loudness_index = 1
-var bars,svg,selected_place,selected_day,UV,startTime,endTime,loudness, loudness_index
+whenLimits = [0,23]
 var placeList = Object.keys(PLACES).map(function (key) { return PLACES[key].id; }); 
 
 $(document).ready(function(){
@@ -24,6 +26,7 @@ $(document).ready(function(){
             orientation: 'vertical'
         });
     loudSlider.noUiSlider.on('slide',updateLoud)
+
     $(".choice").click(function(){
         $(this).siblings().removeClass("active")
         $(this).addClass("active");
@@ -97,10 +100,10 @@ function whereInject(){
     })
 }
 function whenInject(){
-    $("#choice-action").append("<h1 class='text-upper'>Pick a time.</h1><h2>Pick a time by adjusting the sliders below.</h2><br><div id='when-box'><div class='half'><div id='when-slider'></div></div><div class='half'><div class='when-preselect' id='morning'><img src='img/morning.png'></div><div class='when-preselect' id='afternoon'><img src='img/afternoon.png'></div><div class='when-preselect' id='evening'><img src='img/evening.png'></div></div></div>")
-    var whenSlider = document.getElementById('when-slider');
-        whenSlider.style.height = '400px';
-        whenSlider.style.margin = '0 auto 30px';
+    $("#choice-action").append("<h1 class='text-upper'>Pick a time.</h1><h2>Pick a time by adjusting the sliders below.</h2><br><div id='when-box'><div><div id='when-slider'></div></div><div><div class='when-preselect' id='morning'><img src='img/morning.png'><br><span>MORNING</span></div><br><div class='when-preselect' id='afternoon'><img src='img/afternoon.png'><br><span>AFTERNOON</span></div><br><div class='when-preselect' id='evening'><img src='img/evening.png'><br><span>EVENING</span></div></div></div>")
+        whenSlider = document.getElementById('when-slider');
+        whenSlider.style.height = '80%';
+        whenSlider.style.margin = '0 auto';
         noUiSlider.create(whenSlider, {
             behaviour: 'tap-drag',
             start: [ 0, 12 ],
@@ -118,8 +121,16 @@ function whenInject(){
             step: 1,
             orientation: 'vertical'
         });
+    whenSlider.noUiSlider.on('slide',updateTime([10,20],updateVisualization))
     $("#choice-action").append('<div id="continue"><span class="text-white text-upper">CONTINUE</span></div>');
     $("#continue").click(moveToResults);
+    $('.when-preselect').click(function(){
+        switch($(this).attr('id')){
+            case 'morning': whenSlider.noUiSlider.set([6,12]); break;
+            case 'afternoon': whenSlider.noUiSlider.set([12,18]); break;
+            case 'evening': whenSlider.noUiSlider.set([18,23]); break;
+        }
+    })
 }
 function updatePlace(str,fn=null){
     selected_place = str;
@@ -130,9 +141,14 @@ function updateDay(str,fn=null){
     fn(place_id=selected_place,day_id=str);
 }
 function updateLoud(){
-    console.log(loudSlider)
     loudness_index = parseInt(loudSlider.noUiSlider.get());
     updateVisualization(place_id=selected_place,day_id=selected_day,loud=loudness_index);
+}
+function updateTime(arr,fn=null){
+    console.log("arr")
+    whenLimits = arr;
+    console.log("update")
+    fn(place_id=selected_place,day_id=selected_day,loud=loudness_index,when=whenLimits)
 }
 function search(str){
     for(place in PLACES){
@@ -205,7 +221,7 @@ d3.csv("data/"+selected_place+"_"+selected_day+".csv", format, function(error, d
 
 })
 
-function updateVisualization(place_id=selected_place,day_id=selected_day,loud=loudness_index){
+function updateVisualization(place_id=selected_place,day_id=selected_day,loud=loudness_index,when=whenLimits){
     console.log("data/"+place_id+"_"+day_id+".csv")
     d3.csv("data/"+place_id+"_"+day_id+".csv", format, function(error, data){
         console.log(data)
@@ -222,7 +238,7 @@ function updateVisualization(place_id=selected_place,day_id=selected_day,loud=lo
             .duration(500)
             .attr("class", "bar")
             .attr("height", function(d) { return height-yScale(d.value); })
-            .attr("x", function(d) { return xScale(d.time)-barWidth/2; })
+            .attr("x", function(d) { return xScale(d.time); })
             .attr("width", barWidth)
             .attr("y", function(d){ return yScale(d.value)})
             .attr("rx", barRadius)
