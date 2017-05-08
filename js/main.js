@@ -1,7 +1,7 @@
 /* STATE VARIABLES */ 
 
 
-var bars,svg,selected_place,selected_day,UV,startTime,endTime,loudness, loudness_index,whenLimits,preference
+var bars,svg,selected_place,selected_day,UV,startTime,endTime,loudness, loudness_index,whenLimits,preference,place_rec
 preference = 'where'
 selected_place = 'lev';
 var DATE = new Date()
@@ -57,6 +57,7 @@ $(document).ready(function(){
         moveToChoices()
     })
     $("#back").click(moveLeft);
+    $('#place-rec').click(function(){ updateVisualization(place_id=place_rec)})
     $(".selection-arrow").click(function(){
         if($(this).hasClass('left'))
             updatePlace(placeList[(placeList.indexOf(selected_place)+placeList.length-1)%placeList.length],updateVisualization)
@@ -205,7 +206,7 @@ d3.csv("data/"+selected_place+"_"+selected_day+".csv", format, function(error, d
 
     svg.append("g")
         .attr("class", "y axis")
-        .call(yAxis);
+        //.call(yAxis);
 
     svg.append("g")
         .attr("class", "x axis")
@@ -333,7 +334,6 @@ function format(d) {
 UV = updateVisualization;
 
 function updateRec(pref){
-    var place_rec = ''
     var placeLoud = {}
     placeList.forEach(function(x){ placeLoud[x] = 0 });
     if(pref == 'where'){

@@ -6,7 +6,7 @@ body{
 h1,h2,h3,h4,h5,h6 {
     font-family: 'Poppins', sans-serif;
     font-weight: 700;
-    color: #FF5858 !important;
+    color: #FF5858;
     margin: 0;
 }
 p {
@@ -58,7 +58,7 @@ input[type="text"]:focus{
 .super {
     font-size: 4em;
 }
-#back {
+div#back {
     position: fixed; 
     bottom: 0;
     left: 0;
@@ -321,6 +321,16 @@ input[type="text"]:focus{
 .day-select.selected {
     color: white;
     background-color: #FF5858;
+}
+#preference {
+    color: lightseagreen;
+}
+#place-rec {
+    color: lightseagreen;
+    text-decoration: underline;
+}
+#place-rec:hover {
+    cursor: pointer;
 }
 /* VIZ THINGS */
 .bar {
