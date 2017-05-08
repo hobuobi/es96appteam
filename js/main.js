@@ -5,7 +5,8 @@ var bars,svg,selected_place,selected_day,UV,startTime,endTime,loudness, loudness
 preference = 'where'
 selected_place = 'lev';
 var DATE = new Date()
-selected_day = (['sun','mon','tue','wed','thu','fri','sat'])[DATE.getDay()]
+today = (['sun','mon','tue','wed','thu','fri','sat'])[DATE.getDay()]
+selected_day = today;
 loudness = [10,20,30,1000]
 loudness_index = 1
 whenLimits = [0,23]
@@ -32,7 +33,7 @@ $(document).ready(function(){
             
         });
     loudSlider.noUiSlider.on('slide',updateLoud)
-
+    $("#"+today).click();
     $(".choice").click(function(){
         $(this).siblings().removeClass("active")
         $(this).addClass("active");
@@ -41,6 +42,9 @@ $(document).ready(function(){
         $(this).siblings().removeClass("selected")
         $(this).addClass("selected");
         updateDay($(this).attr('id'),updateVisualization);
+    })
+    $(".day-select-alt").click(function(){
+        $("#"+today).click();
     })
     $(".pref").click(function(){
         $("#choice-action").empty();
@@ -171,7 +175,7 @@ function search(str){
     }
 }
     /* GRAPH FUNCTIONS */
-var margin = {top: 20, right: 30, bottom: 30, left: 30},
+var margin = {top: 20, right: 30, bottom: 50, left: 30},
     width = parseInt(d3.select("#graph").style("width")) - margin.left - margin.right,
     height = parseInt(d3.select("#graph").style("height")) - margin.top - margin.bottom;
 
@@ -189,7 +193,8 @@ var xAxis = d3.svg.axis()
     .scale(xScale)
     .orient("bottom")
     .tickFormat(function(d){
-        return (d%12)+1
+        var suffix = d< 12 ? 'AM' : 'PM'
+        return ((d%12)+1)+suffix
     })
 
 svg = d3.select("#graph")
@@ -214,7 +219,7 @@ d3.csv("data/"+selected_place+"_"+selected_day+".csv", format, function(error, d
         .attr("transform", "translate(0," + (height+10) + ")")
         .append("text")
         .attr("class", "label")
-        .attr("transform", "translate(" + width / 2 + "," + margin.bottom / 1.2 + ")")
+        .attr("transform", "translate(" + width / 2 + "," + margin.bottom / 1.3 + ")")
         .style("text-anchor", "middle")
         .text("Time");
     barRadius = width/400;
