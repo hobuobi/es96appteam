@@ -1,7 +1,8 @@
 /* STATE VARIABLES */ 
 
 
-var bars,svg,selected_place,selected_day,UV,startTime,endTime,loudness, loudness_index,whenLimits
+var bars,svg,selected_place,selected_day,UV,startTime,endTime,loudness, loudness_index,whenLimits,preference
+preference = 'where'
 selected_place = 'lev';
 var DATE = new Date()
 selected_day = (['sun','mon','tue','wed','thu','fri','sat'])[DATE.getDay()]
@@ -40,10 +41,14 @@ $(document).ready(function(){
     $(".pref").click(function(){
         $("#choice-action").empty();
         if($(this).attr('id') == 'where'){
+            preference = 'where'
+            $('#preference').text(preference)
             whereInject();
         }
         else{
-            whenInject();
+            preference = 'when'
+            $('#preference').text(preference)
+            whenInject(); 
         }
         moveToChoices()
     })
@@ -82,8 +87,8 @@ function moveLeft(){
         }
 }
 function whereInject(){
-    $("#choice-action").append("<h1 class='text-upper'>Pick a place.</h1><h2>Choose from any of the following, then press CONTINUE.</h2><input name='place-search' id='place-search' type='text' placeholder='Search a place here.'><br>");
-    $("#choice-action").append('<div id="continue"><span class="text-white text-upper">CONTINUE</span></div>');
+    $("#choice-action").append("<h1 class='text-upper'>Pick a place.</h1><h2>Choose from any of the following, then press <span class='text-green'>CONTINUE.</span></h2><input name='place-search' id='place-search' type='text' placeholder='Search a place here.'><br>");
+    $("#choice-action").append('<div id="continue"><span class="text-white text-upper"><b>CONTINUE</b></span></div>');
     $("#continue").click(moveToResults);
     for(place in PLACES){
         $("#choice-action").append("<div class='place choice' id='"+PLACES[place].id+"'><p class='text-upper text-red'>"+PLACES[place].name+"</p><p>Capacity: "+PLACES[place].capacity+" People</p><p><span class='text-green text-upper'>OPEN</span> | "+PLACES[place].open+"</p></div>")
@@ -91,10 +96,11 @@ function whereInject(){
     $(".choice").click(function(){
         $(this).siblings().removeClass("active")
         $(this).addClass("active");
+        updateRec(preference);
     })
     $(".place").click(function(){
         updatePlace($(this).attr("id"),updateVisualization);
-//        updateVisualization();
+        updateRec(preference);
     })
     $("#place-search").keyup(function(){
         search($(this).val().toLowerCase())
@@ -128,9 +134,9 @@ function whenInject(){
     $("#continue").click(moveToResults);
     $('.when-preselect').click(function(){
         switch($(this).attr('id')){
-            case 'morning': whenLimits = [6,12]; whenSlider.noUiSlider.set([6,12]); break;
-            case 'afternoon': whenLimits = [12,18]; whenSlider.noUiSlider.set([12,18]); break;
-            case 'evening': whenLimits = [18,23]; whenSlider.noUiSlider.set([18,23]); break;
+            case 'morning': whenLimits = [6,12];  whenSlider.noUiSlider.set([6,12]); selected_place = updateRec(preference); updateVisualization(); break;
+            case 'afternoon': whenLimits = [12,18];  whenSlider.noUiSlider.set([12,18]); selected_place = updateRec(preference); updateVisualization(); break;
+            case 'evening': whenLimits = [18,23];  whenSlider.noUiSlider.set([18,23]); selected_place = updateRec(preference); updateVisualization(); break;
         }
     })
 }
@@ -147,9 +153,7 @@ function updateLoud(){
     updateVisualization(place_id=selected_place,day_id=selected_day,loud=loudness_index);
 }
 function updateTime(arr,fn=null){
-    console.log("arr")
     whenLimits = arr;
-    console.log("update")
     fn(place_id=selected_place,day_id=selected_day,loud=loudness_index,when=whenLimits)
 }
 function search(str){
@@ -223,7 +227,7 @@ d3.csv("data/"+selected_place+"_"+selected_day+".csv", format, function(error, d
 
 })
 
-function updateVisualization(place_id=selected_place,day_id=selected_day,loud=loudness_index,when=whenLimits){
+function updateVisualization(place_id=selected_place,day_id=selected_day,loud=loudness_index,when=whenLimits,pref=preference){
     console.log("data/"+place_id+"_"+day_id+".csv")
     d3.csv("data/"+place_id+"_"+day_id+".csv", format, function(error, data){
         console.log(data)
@@ -246,12 +250,27 @@ function updateVisualization(place_id=selected_place,day_id=selected_day,loud=lo
             .attr("rx", barRadius)
             .attr("ry", barRadius)
             .attr("opacity",function(d){
-                if(d.value<loudness[loud]){
-                    return 1;
+                if(pref == 'when'){
+                    if(d.time >= whenLimits[0] && d.time <= whenLimits[1]){
+                        
+                        if(d.value<loudness[loud]){
+                            return 1;
+                        }
+                            
+                        else
+                            return 0.6;
+                    }
                 }
-                    
-                else
-                    return 0.6;
+                else {
+                        if(d.value<loudness[loud]){
+                            return 1;
+                        }
+                            
+                        else
+                            return 0.6;
+                }
+                return 0.6
+                
             })
         $('#selection-name').text(PLACES[place_id].name)
     })
@@ -308,6 +327,31 @@ function format(d) {
   return d;
 }
 UV = updateVisualization;
+
+function updateRec(pref){
+    var place_rec = ''
+    var placeLoud = {}
+    placeList.forEach(function(x){ placeLoud[x] = 0 });
+    if(pref == 'where'){
+        place_rec = selected_place;
+    }
+    else{
+        placeList.forEach(function(place){
+            d3.csv("data/"+place+"_"+selected_day+".csv", format, function(error, data){
+                data = data.filter(function(d){ return d.time >= whenLimits[0] && d.time <= whenLimits[1]})
+                data.forEach(function(d){
+                    placeLoud[place] += d.value;
+                });
+                placeLoud[place] = placeLoud[place]/data.length
+            })
+        })
+        place_rec = placeList.reduce(function(prev, curr) {
+            return placeLoud[prev] < placeLoud[curr] ? prev : curr;
+        });
+    }
+    $('#place-rec').text(PLACES[place_rec].name);
+    return place_rec
+}
 })
 
 /*
