@@ -1,7 +1,7 @@
 /* STATE VARIABLES */ 
 
 
-var bars,svg,selected_place,selected_day,UV,startTime,endTime,loudness, loudness_index,whenLimits,whenSlider
+var bars,svg,selected_place,selected_day,UV,startTime,endTime,loudness, loudness_index,whenLimits
 selected_place = 'lev';
 var DATE = new Date()
 selected_day = (['sun','mon','tue','wed','thu','fri','sat'])[DATE.getDay()]
@@ -101,6 +101,7 @@ function whereInject(){
     })
 }
 function whenInject(){
+    var whenSlider;
     $("#choice-action").append("<h1 class='text-upper'>Pick a time.</h1><h2>Pick a time by adjusting the sliders below.</h2><br><div id='when-box'><div><div id='when-slider'></div></div><div><div class='when-preselect' id='morning'><img src='img/morning.png'><br><span>MORNING</span></div><br><div class='when-preselect' id='afternoon'><img src='img/afternoon.png'><br><span>AFTERNOON</span></div><br><div class='when-preselect' id='evening'><img src='img/evening.png'><br><span>EVENING</span></div></div></div>")
         whenSlider = document.getElementById('when-slider');
         whenSlider.style.height = '80%';
@@ -112,7 +113,7 @@ function whenInject(){
             connect: [false,true,false],
             range: {
                 'min': [ 00 ],
-                'max': [ 24 ]
+                'max': [ 23 ]
             },
             format: wNumb({
 		    decimals: 2,
@@ -127,9 +128,9 @@ function whenInject(){
     $("#continue").click(moveToResults);
     $('.when-preselect').click(function(){
         switch($(this).attr('id')){
-            case 'morning': whenSlider.noUiSlider.set([6,12]); break;
-            case 'afternoon': whenSlider.noUiSlider.set([12,18]); break;
-            case 'evening': whenSlider.noUiSlider.set([18,23]); break;
+            case 'morning': whenLimits = [6,12]; whenSlider.noUiSlider.set([6,12]); break;
+            case 'afternoon': whenLimits = [12,18]; whenSlider.noUiSlider.set([12,18]); break;
+            case 'evening': whenLimits = [18,23]; whenSlider.noUiSlider.set([18,23]); break;
         }
     })
 }
